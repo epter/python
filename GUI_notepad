@@ -1,0 +1,43 @@
+from tkinter import *
+import os
+
+root = Tk()
+root.title("untitle_txt")
+
+root.geometry("640x480")
+
+
+filename = "mynote.txt"
+def open_file():
+    if os.path.isfile(filename):
+        with open(filename, "r", encoding="utf8") as file:
+            txt.delete("1.0",END)
+            txt.insert(END, file.read())
+
+def save_file():
+    with open(filename, "w", encoding="utf8") as file:
+        file.write(txt.get("1.0",END))
+
+menu = Menu(root)
+
+menu_file = Menu(menu, tearoff=0)
+menu_file.add_command(label="open", command=open_file)
+menu_file.add_command(label="save", command=save_file)
+menu_file.add_separator()
+menu_file.add_command(label="End",command = root.quit)
+menu.add_cascade(label="file",menu=menu_file)
+
+menu.add_cascade(label="edit")
+menu.add_cascade(label="template")
+menu.add_cascade(label="preview")
+menu.add_cascade(label="help")
+
+scorllbar = Scrollbar(root)
+scorllbar.pack(side="right",fill="y")
+
+txt = Text(root, yscrollcommand=scorllbar.set)
+txt.pack(side = "left", fill="both", expand=True)
+scorllbar.config(command=txt.yview)
+
+root.config(menu=menu)
+root.mainloop()
